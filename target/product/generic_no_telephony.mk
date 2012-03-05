@@ -19,6 +19,10 @@
 
 PRODUCT_POLICY := android.policy_phone
 
+PRODUCT_PACKAGES += \
+    Superuser \
+    su
+
 PRODUCT_PACKAGES := \
     DeskClock \
     AlarmProvider \

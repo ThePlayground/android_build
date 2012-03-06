@@ -19,10 +19,6 @@
 
 PRODUCT_POLICY := android.policy_phone
 
-PRODUCT_PACKAGES += \
-    Superuser \
-    su
-
 PRODUCT_PACKAGES := \
     DeskClock \
     AlarmProvider \
@@ -40,6 +36,8 @@ PRODUCT_PACKAGES := \
     Settings \
     Sync \
     SystemUI \
+    Superuser \
+    su \
     Updater \
     CalendarProvider \
     SyncProvider \

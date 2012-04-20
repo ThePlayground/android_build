@@ -1,5 +1,12 @@
 #Android makefile to build kernel as a part of Android Build
 
+ifneq ($(TARGET_PREBUILT_KERNEL),)
+        $(warning **********************************************************)
+        $(warning * Using prebuilt binary to replace kernel source         *)
+        $(warning * Configure kernel in kernel/<vendor>/<device>           *)
+        $(warning **********************************************************)
+else
+
 TARGET_AUTO_KDIR := $(shell echo $(TARGET_DEVICE_DIR) | sed -e 's/^device/kernel/g')
 
 ## Externally influenced variables
@@ -18,22 +25,13 @@ KERNEL_MODULES_INSTALL := system
 KERNEL_MODULES_OUT := $(TARGET_OUT)/lib/modules
 
 ifeq "$(wildcard $(KERNEL_SRC) )" ""
-    ifneq ($(TARGET_PREBUILT_KERNEL),)
-        $(warning ***************************************************************)
-        $(warning * Using prebuilt kernel binary instead of source              *)
-        $(warning * Kernel source building should be done from $(KERNEL_SRC))
-        $(warning ***************************************************************)
-        KERNEL_BIN := $(TARGET_PREBUILT_KERNEL)
-    else
-        $(warning ***************************************************************)
-        $(warning * No kernel source found, and no fallback prebuilt defined.   *)
-        $(warning * Configure kernel source to build from $(KERNEL_SRC))
-        $(warning * and add the TARGET_KERNEL_CONFIG variable to AndroidBoard.mk*)
-        $(warning *                                                             *)
-        $(warning * Defining TARGET_PREBUILT_KERNEL can also be used instead    *)
-        $(warning ***************************************************************)
+        $(warning **********************************************************)
+        $(warning * No kernel source found, and no prebuilt defined.       *)
+        $(warning * Configure kernel in $(KERNEL_SRC))
+        $(warning * Requires TARGET_KERNEL_CONFIG in AndroidBoard.mk       *)
+        $(warning * Defining TARGET_PREBUILT_KERNEL can also bypass source *)
+        $(warning **********************************************************)
         $(error "NO KERNEL")
-    endif
 else
     ifeq ($(TARGET_KERNEL_CONFIG),)
         $(warning **********************************************************)
@@ -98,3 +96,4 @@ $(file) : $(KERNEL_BIN) | $(ACP)
 
 ALL_PREBUILT += $(INSTALLED_KERNEL_TARGET)
 
+endif

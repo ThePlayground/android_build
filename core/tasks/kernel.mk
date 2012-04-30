@@ -67,6 +67,19 @@ define clean-module-folder
     fi
 endef
 
+ifeq ($(TARGET_ARCH),arm)
+    ifneq ($(USE_CCACHE),)
+      ccache := $(ANDROID_BUILD_TOP)/prebuilt/$(HOST_PREBUILT_TAG)/ccache/ccache
+      # Check that the executable is here.
+      ccache := $(strip $(wildcard $(ccache)))
+    endif
+    ARM_CROSS_COMPILE:=CROSS_COMPILE="$(ccache) $(ARM_EABI_TOOLCHAIN)/arm-eabi-"
+    ccache = 
+endif
+
+ifeq ($(TARGET_KERNEL_MODULES),)
+    TARGET_KERNEL_MODULES := no-external-modules
+endif
 
 $(KERNEL_OUT):
 	mkdir -p $(KERNEL_OUT)
